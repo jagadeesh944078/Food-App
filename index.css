@@ -1,0 +1,50 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+
+.logo {
+  width: 100px;
+}
+
+.nav-items > ul {
+  display: flex;
+}
+.nav-items > ul > li {
+  padding: 20px 10px;
+  font-size: 20px;
+  list-style-type: none;
+}
+.res-card {
+  width: 200px;
+  padding: 5px;
+  margin: 5px;
+  background: lightgray;
+  cursor: pointer;
+}
+
+.res-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter {
+  margin: 10px;
+}
+
+.res-card:hover {
+  border: 1px solid black;
+}
+
+.shimmer-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shimmer-card {
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  background: lightgray;
+}
