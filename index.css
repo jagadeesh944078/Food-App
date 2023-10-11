@@ -27,6 +27,7 @@
 .res-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .filter {
@@ -47,4 +48,12 @@
   width: 200px;
   height: 200px;
   background: lightgray;
+}
+
+.btn {
+  margin: 10px;
+}
+
+.filter-btn {
+  margin-left: 10px;
 }
