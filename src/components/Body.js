@@ -137,10 +137,11 @@ const Body = () => {
           Top Rated Filter
         </button>
       </div>
-      <div className="res-container">
+      <div className="grid grid-cols-4 mx-44 gap-8">
         {filterRestaurents.map((restaurant) => (
           <Link
             to={"/restaurants/" + restaurant.info.id}
+            state={{ data: restaurant.info }}
             key={restaurant.info.id}
           >
             <RestaurantCard resData={restaurant} />
