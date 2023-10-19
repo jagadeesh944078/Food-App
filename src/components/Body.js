@@ -1,15 +1,25 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPrmotedLabel } from "./RestaurantCard";
 import restaurants from "../utils/mockData";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
+import FoodCarousel from "./FoodCarousel";
+import ItemCarousel from "./ItemCarousel";
+import RestaurantCarousel from "./RestaurantCarousel";
 
 const Body = () => {
   const [listOfRestaurents, setListOfRestaurents] = useState([]);
   const [filterRestaurents, setFilterREstaurents] = useState([]);
+  const [carousel, setCarousel] = useState([]);
+  const [itemCarousel, setItemCarousel] = useState([]);
+  const [restaurantCarousel, setRestaurantCarousel] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(10);
+  const { loggedInUser, setUserName } = useContext(UserContext);
+  const isDarkTheme = useSelector((store) => store.theme.isDarkTheme);
 
   useEffect(() => {
     fetchData();
@@ -93,9 +103,16 @@ const Body = () => {
     setFilterREstaurents(
       json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
+    setCarousel(json?.data?.cards[0]?.card?.card?.imageGridCards);
+    setItemCarousel(json?.data?.cards[1]?.card?.card?.imageGridCards);
+    setRestaurantCarousel(
+      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle.restaurants
+    );
   };
 
   const onlineStatus = useOnlineStatus();
+
+  const RestaurantCardPromoted = withPrmotedLabel(RestaurantCard);
 
   if (onlineStatus === false)
     return (
@@ -107,11 +124,15 @@ const Body = () => {
   return listOfRestaurents?.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
-      <div className="filter">
+    <div className={isDarkTheme && "bg-black"}>
+      <FoodCarousel carousel={carousel} />
+      <ItemCarousel itemCarousel={itemCarousel} />
+      <RestaurantCarousel restaurantCarousel={restaurantCarousel} />
+      <div className="mx-32">
         <input
           type="search"
           name="search"
+          className="border p-2 border-black m-4 rounded-md"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -122,11 +143,12 @@ const Body = () => {
             );
             setFilterREstaurents(searchRestaurents);
           }}
+          className="bg-green-400 p-2 font-semibold rounded-md"
         >
           search
         </button>
         <button
-          className="filter-btn"
+          className="bg-green-400 m-4 font-semibold p-2 rounded-md"
           onClick={() => {
             const filterRestaurants = listOfRestaurents.filter(
               (restaurant) => restaurant.info.avgRating > 4.6
@@ -136,17 +158,27 @@ const Body = () => {
         >
           Top Rated Filter
         </button>
+        <input
+          type="text"
+          className="border border-black p-2"
+          value={loggedInUser}
+          onChange={(e) => setUserName(e.target.value)}
+        />
       </div>
-      <div className="grid grid-cols-4 mx-44 gap-8">
-        {filterRestaurents.map((restaurant) => (
-          <Link
-            to={"/restaurants/" + restaurant.info.id}
-            state={{ data: restaurant.info }}
-            key={restaurant.info.id}
-          >
-            <RestaurantCard resData={restaurant} />
-          </Link>
-        ))}
+      <div className="mx-40 text-xl font-bold my-8">
+        <h1>Restaurants with online food delivery in Bangalore</h1>
+        <div className="grid grid-cols-4 gap-8">
+          {filterRestaurents.map((restaurant) => (
+            <Link
+              to={"/restaurants/" + restaurant.info.id}
+              state={{ data: restaurant.info }}
+              key={restaurant.info.id}
+            >
+              {/* <RestaurantCard resData={restaurant} /> */}
+              <RestaurantCardPromoted resData={restaurant} />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
