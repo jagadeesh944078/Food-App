@@ -22,6 +22,7 @@ const Body = () => {
   const isDarkTheme = useSelector((store) => store.theme.isDarkTheme);
 
   useEffect(() => {
+    console.log("shashi");
     fetchData();
   }, []);
 
@@ -51,7 +52,7 @@ const Body = () => {
 
   const getMoreRestaurents = async () => {
     const response = await fetch(
-      "https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/update",
+      `https://51.159.195.115/dapi/restaurants/list/update?__cpo=aHR0cHM6Ly93d3cuc3dpZ2d5LmNvbQ`,
       {
         method: "POST", // Use POST for fetching more restaurants
         headers: {
@@ -164,6 +165,7 @@ const Body = () => {
           value={loggedInUser}
           onChange={(e) => setUserName(e.target.value)}
         />
+        <img src="" />
       </div>
       <div className="mx-40 text-xl font-bold my-8">
         <h1>Restaurants with online food delivery in Bangalore</h1>
